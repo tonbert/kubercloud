@@ -1,0 +1,21 @@
+sudo: required
+
+services:
+  - docker
+
+before_install:
+  - docker build -t hammeran/kuberapp-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run -e CI=true hammeran/kuberapp-test npm test
+
+after_success:
+  - docker build -t hammeran/kuberapp-client ./client
+  - docker build -t hammeran/kuberapp-server ./server
+  - docker build -t hammeran/kuberapp-nginx ./nginx
+  - docker build -t hammeran/kuberapp-worker ./worker
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  - docker push hammeran/kuberapp-client
+  - docker push hammeran/kuberapp-server
+  - docker push hammeran/kuberapp-nginx
+  - docker push hammeran/kuberapp-worker
