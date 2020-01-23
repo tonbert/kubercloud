@@ -16,7 +16,7 @@ before_install:
   - gcloud auth activate-service-account --key-file google_key.json
   - gcloud config set project kubercloud
   - gcloud config set compute/zone europe-north1-b
-  - gcloud container cluster get-credentials standard-cluster-1
+  - gcloud container clusters get-credentials standard-cluster-1
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
   - docker build -t hammeran/kubercloud-test -f ./client/Dockerfile ./client
 
